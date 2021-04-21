@@ -55,10 +55,10 @@ def collapse(graph):
 
     return new_graph
 
-filename = "example3.py"
-g1 = generate_cfg(filename)
-print(g1)
-g1.draw('old.png', prog ='dot')
-g2 = collapse(g1)
-print(g2)
-g2.draw('new.png', prog = 'dot')
+# filename = "example3.py"
+# g1 = generate_cfg(filename)
+# print(g1)
+# g1.draw('old.png', prog ='dot')
+# g2 = collapse(g1)
+# print(g2)
+# g2.draw('new.png', prog = 'dot')

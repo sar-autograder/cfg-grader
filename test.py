@@ -1,6 +1,7 @@
 from pycfg.pycfg import PyCFG, CFGNode, slurp
 from pycfg_ex import generate_cfg
 from munkres import Munkres, print_matrix
+from collapse_test import collapse
 
 def create_cost_matrix(graph1,graph2):
 	nodes1 = graph1.nodes()
@@ -38,25 +39,33 @@ def create_cost_matrix(graph1,graph2):
 
 	return costMatrix
 
-filename = 'segiempat103.py'
-filename2 = 'segiempat107.py'
-g1 = generate_cfg(filename)
-g2 = generate_cfg(filename2)
-print('g1 = ',g1)
-print('g2 = ',g2)
-# g1.draw(filename + '.png', prog ='dot')
-# g2.draw(filename2 + '.png', prog ='dot') 
-m = Munkres()
-costMatrix = create_cost_matrix(g1,g2)
-# print(costMatrix)
-indexes = m.compute(costMatrix)
-print_matrix(costMatrix, msg='Lowest cost through this matrix:')
-total = 0
-for row, column in indexes:
-    value = costMatrix[row][column]
-    total += value
-    print(f'({row}, {column}) -> {value}')
-print(f'total cost: {total}')
+def compare(g1, g2):
+	# filename = 'segiempat104.py'
+	# filename2 = 'segiempat105.py'
+	# g1 = generate_cfg(filename)
+	# g2 = generate_cfg(filename2)
+	# g1 = collapse(generate_cfg(filename))
+	# g2 = collapse(generate_cfg(filename2))
+	# print('g1 = ',g1)
+	# print('g2 = ',g2)
+	# g1.draw(filename + '.png', prog ='dot')
+	# g2.draw(filename2 + '.png', prog ='dot') 
+	m = Munkres()
+	costMatrix = create_cost_matrix(g1,g2)
+	# print(costMatrix)
+	indexes = m.compute(costMatrix)
+	# print_matrix(costMatrix, msg='Lowest cost through this matrix:')
+	total = 0
+	details = []
+	for row, column in indexes:
+		value = costMatrix[row][column]
+		total += value
+		# print(f'({row}, {column}) -> {value}')
+		details.append([row, column, value])
+	# print(f'total cost: {total}')
 
-final_score = (1 - (total / (len(g1.nodes()) + len(g2.nodes()) + len(g1.edges()) +len(g2.edges())))) * 100
-print('Final score = ',final_score)
+	final_score = (1 - (total / (len(g1.nodes()) + len(g2.nodes()) + len(g1.edges()) +len(g2.edges())))) * 100
+	# print('Final score = ',final_score)
+	return final_score, total, details
+
+# compare()
