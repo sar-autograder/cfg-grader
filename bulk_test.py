@@ -13,13 +13,13 @@ class Result:
         self.examplefile = examplefile
         self.results = results
 
-class CompareResult:
-    def __init__(self, nim, whitescore, blackscore, whitediff, details):
-        self.nim = nim
-        self.whitescore = whitescore
-        self.blackscore = blackscore
-        self.diff = diff
-        self.details = details
+# class CompareResult:
+#     def __init__(self, nim, whitescore, blackscore, whitediff, details):
+#         self.nim = nim
+#         self.whitescore = whitescore
+#         self.blackscore = blackscore
+#         self.diff = diff
+#         self.details = details
 
 # root = tk.Tk()
 # root.withdraw()
@@ -34,7 +34,7 @@ dir = "../4661 Praktikum 3 Shift 4 - 15.45-17.45"
 names = [f for f in listdir(dir)]
 # print(names)
 
-examplefile = dir + '/' + names[0] + '/' + filename
+examplefile = "segiempatcontoh.py"
 example_graph = collapse(generate_cfg(examplefile))
 results = []
 
@@ -57,8 +57,15 @@ for i in range(len(names)):
     
     finally:
         blackscore = blackbox(testcasepath, test_file, 50)
-        result = CompareResult(nim, whitescore, blackscore, diff, details)
-        results.append(json.dumps(result.__dict__))
+        # result = CompareResult(nim, whitescore, blackscore, diff, details)
+        result = {
+            "nim" : nim,
+            "whitescore" : whitescore,
+            "blackscore" : blackscore,
+            "diff" : diff,
+            "details" : details
+        }
+        results.append(result)
 
     print(names[i])
 

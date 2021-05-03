@@ -36,9 +36,9 @@ def blackbox(testcasepath, codepath, testcasenum):
     
     if(not(error)):
         codefile.close()
-        return (str((correct/testcasenum)*100))
+        return ((correct/testcasenum)*100)
     else:
-        return "0"
+        return 0
 
 
 

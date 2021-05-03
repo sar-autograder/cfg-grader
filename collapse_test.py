@@ -21,7 +21,7 @@ def collapse(graph):
                     node = graph.get_node(curr_node)
                     label += '\n' + node.attr['label']
                     (_, next_node) = graph.out_edges(curr_node)[0]
-                elif(len(graph.out_edges(next_node)) == 0 and len(graph.in_edges(next_node)) == 1):
+                elif(len(graph.out_edges(next_node)) != 1 and len(graph.in_edges(next_node)) == 1):
                     stop_node = next_node
                     to_be_removed.append(next_node)
                     node = graph.get_node(next_node)
@@ -38,8 +38,10 @@ def collapse(graph):
 
             if(start_node != stop_node):
                 if(len(graph.out_edges(stop_node)) > 0):
-                    (_, end_node) = graph.out_edges(stop_node)[0]
-                    new_graph.add_edge(start_node, end_node)
+                    edges = graph.out_edges(stop_node)
+                    for edge in edges:
+                        (_, end_node) = edge
+                        new_graph.add_edge(start_node, end_node)
                 node = new_graph.get_node(start_node)
                 node.attr['label'] = label
                 
