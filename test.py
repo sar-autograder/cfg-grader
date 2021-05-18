@@ -68,4 +68,16 @@ def compare(g1, g2):
 	# print('Final score = ',final_score)
 	return final_score, total, details
 
-# compare()
+# examplefile = "segiempatcontoh.py"
+# example_graph = collapse(generate_cfg(examplefile))
+# testfile = 'segiempat104.py'
+# test_graph = collapse(generate_cfg(testfile))
+# example_graph.draw("example.png", prog='dot')
+# test_graph.draw("test.png", prog='dot')
+# final_score, total, details = compare(example_graph, test_graph)
+# print("Score = ", final_score)
+# print("Total cost = ", total)
+# print("Detail: ")
+# for detail in details:
+# 	[row, column, value] = detail
+# 	print(f'({row}, {column}) -> {value}')

@@ -39,6 +39,3 @@ def blackbox(testcasepath, codepath, testcasenum):
         return ((correct/testcasenum)*100)
     else:
         return 0
-
-
-

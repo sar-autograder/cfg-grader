@@ -6,6 +6,7 @@ from pycfg_ex import generate_cfg
 from test import compare
 from collapse_test import collapse
 from blackbox import blackbox
+import xlsxwriter
 
 class Result:
     def __init__(self, filename, examplefile, results):
@@ -57,7 +58,6 @@ for i in range(len(names)):
     
     finally:
         blackscore = blackbox(testcasepath, test_file, 50)
-        # result = CompareResult(nim, whitescore, blackscore, diff, details)
         result = {
             "nim" : nim,
             "whitescore" : whitescore,
@@ -69,10 +69,28 @@ for i in range(len(names)):
 
     print(names[i])
 
-final_result = Result(filename, examplefile, results)
+# final_result = Result(filename, examplefile, results)
 
-with open('result.json', 'w') as output:
-    json.dump(final_result.__dict__, output, ensure_ascii=False, indent=4)
+# with open('result.json', 'w') as output:
+#     json.dump(final_result.__dict__, output, ensure_ascii=False, indent=4)
 
-output.close()
+# output.close()
 
+workbook = xlsxwriter.Workbook('results/' + filename[:-3] + '.xlsx')
+worksheet = workbook.add_worksheet()
+
+worksheet.write(0, 0, "NIM")
+worksheet.write(0, 1, "Whitescore")
+worksheet.write(0, 2, "Blackscore")
+worksheet.write(0, 3, "Total Cost")
+worksheet.write(0, 4, "Details")
+
+for i in range(len(results)):
+    result = results[i]
+    worksheet.write(i+1, 0, result['nim'])
+    worksheet.write(i+1, 1, result['whitescore'])
+    worksheet.write(i+1, 2, result['blackscore'])
+    worksheet.write(i+1, 3, result['diff'])
+    worksheet.write(i+1, 4, str(result['details']))
+
+workbook.close()
