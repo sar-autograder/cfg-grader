@@ -35,16 +35,28 @@ dir = "../4661 Praktikum 3 Shift 4 - 15.45-17.45"
 names = [f for f in listdir(dir)]
 # print(names)
 
-examplefile = "segiempatcontoh.py"
-example_graph = collapse(generate_cfg(examplefile))
-results = []
+examplepath = "examples/segiempat/"
+examplefiles = [f for f in listdir(examplepath)]
+example_graphs = [collapse(generate_cfg(examplepath + examplefile)) for examplefile in examplefiles]
+# results = []
+
+workbook = xlsxwriter.Workbook('results/' + filename[:-3] + '.xlsx')
+worksheet = workbook.add_worksheet()
 
 for i in range(len(names)):
     nim = names[i].split()[0]
     test_file = dir +'/' + names[i] + '/' + filename
     try:
+        whitescore = 0
+        diff = ''
+        details = ''
         test_graph = collapse(generate_cfg(test_file))
-        whitescore, diff, details = compare(example_graph, test_graph)
+        for example_graph in example_graphs:
+            temp_whitescore, temp_diff, temp_details = compare(example_graph, test_graph)
+            if(temp_whitescore >= whitescore):
+                whitescore = temp_whitescore
+                diff = temp_diff
+                details = temp_details
         
     except FileNotFoundError:
         whitescore = 0
@@ -58,14 +70,19 @@ for i in range(len(names)):
     
     finally:
         blackscore = blackbox(testcasepath, test_file, 50)
-        result = {
-            "nim" : nim,
-            "whitescore" : whitescore,
-            "blackscore" : blackscore,
-            "diff" : diff,
-            "details" : details
-        }
-        results.append(result)
+        worksheet.write(i+1, 0, nim)
+        worksheet.write(i+1, 1, whitescore)
+        worksheet.write(i+1, 2, blackscore)
+        worksheet.write(i+1, 3, diff)
+        worksheet.write(i+1, 4, str(details))
+        # result = {
+        #     "nim" : nim,
+        #     "whitescore" : whitescore,
+        #     "blackscore" : blackscore,
+        #     "diff" : diff,
+        #     "details" : details
+        # }
+        # results.append(result)
 
     print(names[i])
 
@@ -76,21 +93,14 @@ for i in range(len(names)):
 
 # output.close()
 
-workbook = xlsxwriter.Workbook('results/' + filename[:-3] + '.xlsx')
-worksheet = workbook.add_worksheet()
-
 worksheet.write(0, 0, "NIM")
 worksheet.write(0, 1, "Whitescore")
 worksheet.write(0, 2, "Blackscore")
 worksheet.write(0, 3, "Total Cost")
 worksheet.write(0, 4, "Details")
 
-for i in range(len(results)):
-    result = results[i]
-    worksheet.write(i+1, 0, result['nim'])
-    worksheet.write(i+1, 1, result['whitescore'])
-    worksheet.write(i+1, 2, result['blackscore'])
-    worksheet.write(i+1, 3, result['diff'])
-    worksheet.write(i+1, 4, str(result['details']))
+# for i in range(len(results)):
+#     result = results[i]
+    
 
 workbook.close()
